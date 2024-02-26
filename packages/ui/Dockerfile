@@ -7,15 +7,16 @@ COPY deploy ./deploy
 COPY deploy/nginx /etc/nginx
 COPY deploy/supervisor /etc/supervisor
 
-COPY ./ytsaurus-ui-*.tgz ./
+COPY . .
 
 ARG UI_VERSION
 ARG DEV
 
-RUN UI_PACKAGE=$(test -n "${DEV}" && echo ./ytsaurus-ui-${UI_VERSION}.tgz || echo @ytsaurus/ui@${UI_VERSION}) \
-        && echo "\n  UI_VERSION=${UI_VERSION} \n  DEV=${DEV} \n  UI_PACKAGE=${UI_PACKAGE} \n" >&2 \
-        && npm install --legacy-peer-deps $UI_PACKAGE \
-        && mv node_modules/@ytsaurus/ui . && mv ui/* .
+# build app
+RUN npm ci -q --no-progress --include=dev --also=dev
+RUN npm run build
+RUN npm prune --production
+RUN rm -rf assets src /tmp/* /root/.npm
 
 EXPOSE 80
 

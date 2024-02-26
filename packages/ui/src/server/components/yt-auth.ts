@@ -9,12 +9,13 @@ export function isYtAuthEnabled(config: AppConfig) {
 
 export function YTAuthLogout(res: Response) {
     const clusters = getClustersFromConfig();
+    const host = res.req.hostname;
 
     res.setHeader(
         'set-cookie',
-        [`${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`].concat(
+        [`${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0; Domain=${host}`].concat(
             Object.keys(clusters).map(
-                (cluster) => `${cluster}:${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0;`,
+                (cluster) => `${cluster}:${YT_CYPRESS_COOKIE_NAME}=deleted; Path=/; Max-Age=0; Domain=${host};`,
             ),
         ),
     );

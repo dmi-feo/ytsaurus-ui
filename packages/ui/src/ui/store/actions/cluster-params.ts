@@ -169,6 +169,7 @@ export function updateCluster(
         });
 
         const rumId = new RumWrapper(cluster, RumMeasureTypes.CLUSTER_PARAMS);
+        const host = window.location.hostname;
         return rumId
             .fetch<AxiosResponse<ClusterInfoData>>(
                 YTApiId.ui_clusterInfo,
@@ -217,6 +218,7 @@ export function updateCluster(
                         YT.parameters.login = login;
                         dispatch({type: GLOBAL_PARTIAL, data: {login}});
                         Cookies.set(getXsrfCookieName(cluster), csrf_token);
+                        Cookies.set('CSRF-TOKEN', csrf_token, { domain: host })
                         return onUpdateEnd()
                             .then(() => {
                                 dispatch({

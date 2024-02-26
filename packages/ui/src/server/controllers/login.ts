@@ -23,6 +23,7 @@ export async function handleLogin(req: Request, res: Response) {
 
         const {proxyBaseUrl} = getYTApiClusterSetup(ytAuthCluster);
         const requestUrl = `${proxyBaseUrl}/login`;
+        const host = req.hostname;
 
         const basicAuth = Buffer.from(`${username}:${password}`).toString('base64');
 
@@ -44,6 +45,7 @@ export async function handleLogin(req: Request, res: Response) {
                         if (headers['set-cookie']) {
                             headers['set-cookie'] = headers['set-cookie'].reduce<string[]>(
                                 (ret, item) => {
+                                    item = item.concat(`; Domain=${host}`);
                                     ret.push(item);
 
                                     if (item.startsWith(YT_CYPRESS_COOKIE_NAME)) {
