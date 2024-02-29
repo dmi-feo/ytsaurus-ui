@@ -29,6 +29,8 @@ TableOverview.propTypes = {
     isFullScreen: PropTypes.bool.isRequired,
     isSplit: PropTypes.bool.isRequired,
     allowQueryTracker: PropTypes.bool,
+    showDatalens: PropTypes.bool.isRequired,
+    toggleShowDatalens: PropTypes.func.isRequired,
 };
 
 function TableOverview(props) {
@@ -59,7 +61,13 @@ function TableOverview(props) {
                                 className: block('yql'),
                             })}
                         {!isFullScreen && <JupyterButton block={block} />}
-                        {!isFullScreen && <DataLensButton className={block('datalens')} />}
+                        {!isFullScreen && (
+                            <DataLensButton
+                                showDatalens={props.showDatalens}
+                                toggleShowDatalens={props.toggleShowDatalens}
+                                className={block('datalens')}
+                            />
+                        )}
                         {!isFullScreen && <TableActions block={block} />}
                         <FullScreenButton block={block} />
                         {!isFullScreen && <EditTableActions />}

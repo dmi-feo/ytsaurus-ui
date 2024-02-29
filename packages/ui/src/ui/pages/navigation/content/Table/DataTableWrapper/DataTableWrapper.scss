@@ -1,6 +1,7 @@
 .data-table-wrapper {
     margin-top: 20px;
     position: relative;
+    overflow: scroll;
 
     .data-table {
         &__row {

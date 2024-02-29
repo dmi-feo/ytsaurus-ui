@@ -49,6 +49,8 @@ import './Table.scss';
 import TableColumnsPresetNotice from './TableOverview/TableColumnsPresetNotice';
 import {makeTableRumId} from '../../../../store/actions/navigation/content/table/table-rum-id';
 
+import {uiSettings} from '../../../../config/ui-settings';
+
 const block = cn('navigation-table');
 
 Table.columnsProps = PropTypes.arrayOf(
@@ -133,7 +135,7 @@ const renderTable = (props) => {
     } else if (isFullScreen) {
         stickyTop = 0;
     } else {
-        stickyTop = HEADER_HEIGHT + OVERVIEW_HEIGHT;
+          stickyTop = 0;
     }
 
     const tableSettings = {
@@ -172,6 +174,13 @@ function Table(props) {
     }, [path]);
 
     const {isFullScreen, handleScreenChanged, isDynamic} = props;
+    const [showDatalens, toggleShowDatalens] = React.useState(false);
+
+    const yt_path = useSelector(getPath);
+    const {datalensBaseUrl} = uiSettings;
+
+    const dl_url = `${datalensBaseUrl}/workbooks/fake-chyt-wb-id/datasets/new?id=CHYT_DEFAULT_CONN_ID&ytPath=${yt_path}&action=autoCreate`;
+
     return (
         <div className={block()}>
             <TableMeta />
@@ -182,8 +191,21 @@ function Table(props) {
                 onChange={handleScreenChanged}
             >
                 <StickyContainer>
-                    <TableOverview />
-                    {renderTable(props)}
+                    <TableOverview
+                        showDatalens={showDatalens}
+                        toggleShowDatalens={toggleShowDatalens}
+                    />
+
+                    {showDatalens ? (
+                        <iframe
+                            frameBorder="0"
+                            allowFullScreen
+                            className={block('iframe')}
+                            src={dl_url}
+                        ></iframe>
+                    ) : (
+                        renderTable(props)
+                    )}
                 </StickyContainer>
             </FullScreen>
             {renderColumnSelectorModal(props)}

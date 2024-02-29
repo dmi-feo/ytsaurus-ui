@@ -56,6 +56,7 @@ const config: Partial<AppConfig> = {
         reHashFromNodeVersion: '[^~]+~(?<hash>[^+]+)',
         directDownload: true,
         docsBaseUrl: process.env.YT_DOCS_BASE_URL || 'https://ytsaurus.tech/docs/en',
+        datalensBaseUrl: process.env.DATALENS_BASE_URL,
     },
 };
 

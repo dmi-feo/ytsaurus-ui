@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from 'react';
 import {useSelector} from 'react-redux';
 
@@ -15,7 +17,15 @@ import {docsUrl} from '../../../../../config';
 import {uiSettings} from '../../../../../config/ui-settings';
 import UIFactory from '../../../../../UIFactory';
 
-export default function DataLensButton({className}: {className: string}) {
+export default function DataLensButton({
+    className,
+    showDatalens,
+    toggleShowDatalens,
+}: {
+    className: string;
+    showDatalens: boolean;
+    toggleShowDatalens: Function;
+}) {
     const loaded = useSelector(getNavigationPathAttributesLoadState) === LOADING_STATUS.LOADED;
     const cluster: string = useSelector(getCluster);
     const path = useSelector(getPath);
@@ -23,18 +33,16 @@ export default function DataLensButton({className}: {className: string}) {
         getNavigationTableDataLensButtonAlerts,
     );
 
-    const {datalensBaseUrl, datalensAllowedCluster} = uiSettings;
+    const {datalensBaseUrl} = uiSettings;
 
-    if (!datalensBaseUrl || !new Set(datalensAllowedCluster).has(cluster)) {
+    if (!datalensBaseUrl) {
         return null;
     }
     const showTooltip = isEmptySchema || enableDynamicStoreRedRequired;
 
-    const url = `${datalensBaseUrl}/datasets/new?id=CHYT_${cluster.toUpperCase()}&ytPath=${path}&action=autoCreate`;
-
     const btn = (
         <Button
-            href={url}
+            onClick={() => toggleShowDatalens(!showDatalens)}
             view={'action'}
             target="_blank"
             title="Create dataset in DataLens"

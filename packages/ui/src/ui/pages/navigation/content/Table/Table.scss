@@ -24,4 +24,15 @@
     &__fullscreen:fullscreen {
         background-color: var(--main-background);
     }
+
+    &__iframe {
+        display: block;
+        margin-right: 10px;
+        width: 100%;
+        height: 100vh;
+    }
+
+    &__iframe-container {
+        height: 100%;
+    }
 }
